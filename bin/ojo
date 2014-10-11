@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require 'awesome_print'
+require File.expand_path('../../lib/ojo', __FILE__)
+
+options = Ojo.parse_it_baby
+
+Ojo.initialize_current_directory(options) if options[:initialize]
+
+settings = Ojo.read_config_file
+settings.merge!(options) if options && settings
+
+unless options[:initialize]
+
+  location_base = settings[:path]
+
+  unless location_base
+    puts 'you need a location before we can continue'
+    exit
+  end
+
+  unless settings[:branch_1]
+    puts 'you need a first branch name'
+    exit
+  end
+
+  unless settings[:branch_2]
+    puts 'you need a second branch name'
+    exit
+  end
+
+  Ojo.compare(location_base, settings[:branch_1], settings[:branch_2])
+
+  if settings[:open]
+    `open #{location_base}` if Dir.exist?(location_base)
+  end
+end
