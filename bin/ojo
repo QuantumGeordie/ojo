@@ -29,7 +29,9 @@ unless options[:initialize]
     exit
   end
 
-  Ojo.compare(location_base, settings[:branch_1], settings[:branch_2])
+  all_same, results = Ojo.compare(location_base, settings[:branch_1], settings[:branch_2])
+
+  Ojo.display_to_console results
 
   if settings[:open]
     `open #{location_base}` if Dir.exist?(location_base)

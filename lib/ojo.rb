@@ -1,7 +1,8 @@
 require 'ojo/version'
 require 'ojo/comparison'
 require 'ojo/option_parsing'
-require 'ojo/initilization'
+require 'ojo/initialization'
+require 'ojo/output'
 
 require 'collimator'
 

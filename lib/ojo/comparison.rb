@@ -6,17 +6,10 @@ module Ojo
     files_1 = Dir[File.join(location, branch_1, '*.png')]
     files_2 = Dir[File.join(location, branch_2, '*.png')]
 
-    Table.header('Ojo')
-    Table.header(location)
-    Table.header(Date.today.to_s)
-
-    Table.column(branch_1, :width => 40, :padding => 2, :justification => :left)
-    Table.column(branch_2, :width => 40, :padding => 2, :justification => :left)
-    Table.column('Results', :width => 11, :justification => :center)
-
     FileUtils.mkdir_p(File.join(location, 'diff'))
 
-    results = true
+    all_same = true
+    results = { :location => location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
 
     files_1.count.times do |i|
       diff_file = File.join(location, 'diff', File.basename(files_1[i]))
@@ -26,24 +19,21 @@ module Ojo
         output = out
       end
 
-      same = false
+      this_same = false
       red  = green = blue = alpha = all = '_'
       if status.success?
-        same, red, green, blue, alpha, all = unpack_comparison_results(output)
+        this_same, red, green, blue, alpha, all = unpack_comparison_results(output)
       else
-        same  = false
+        this_same  = false
         red   = green = blue  = alpha = all   = 'XX'
         file_diff = 'none'
       end
 
-      cell_data = {:data => same ? 'PASS' : 'FAIL', :color => same ? :green : :red}
-      Table.row([File.basename(files_1[i]), File.basename(files_2[i]), cell_data])
-      results = results && same
+      results[:results][File.basename(files_1[i])] = { :same => this_same, :file_1 => files_1[i], :file_2 => files_2[i] }
+      all_same = all_same && this_same
     end
 
-    Table.footer("Total Results: #{results ? 'PASS' : '**** FAIL ****'}", :justification => :center)
-
-    Table.tabulate
+    [all_same, results]
   end
 
   private
