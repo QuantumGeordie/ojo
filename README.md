@@ -57,7 +57,7 @@ After both sets of data have been run, the `Ojo` rake task `ojo:compare[branch_1
     |  test_home.png                           |  test_home.png                           |   PASS    |
     |  user.png                                |  user.png                                |   FAIL    |
     +-------------------------------------------------------------------------------------------------+
-    |                                  Total Results: **** FAIL ****                                  |
+    |                                      Total Results: FAIL                                        |
     +-------------------------------------------------------------------------------------------------+
 
 you can see here that not everything passed (or was exactly the same) in each test case. the `user` and `current_user` cases did not pass. to investigate why, you can look at the `diff` directory under `/path/to/screenshots/`. you will see what differences were found in each test case.

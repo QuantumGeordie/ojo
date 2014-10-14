@@ -8,5 +8,4 @@ module Ojo
   def self.location
     @location
   end
-
 end

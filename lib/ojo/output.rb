@@ -1,7 +1,5 @@
 module Ojo
-
   def self.display_to_console(data)
-
     Table.header('Ojo')
     Table.header(data[:location])
     Table.header(Date.today.to_s)
@@ -19,9 +17,8 @@ module Ojo
       Table.row([File.basename(data[:results][basename][:file_1]), File.basename(data[:results][basename][:file_2]), cell_data])
     end
 
-    Table.footer("Total Results: #{all_same ? 'PASS' : '**** FAIL ****'}", :justification => :center)
+    Table.footer("Total Results: #{all_same ? 'PASS' : 'FAIL'}", :justification => :center)
 
     Table.tabulate
   end
-
 end
