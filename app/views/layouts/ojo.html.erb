@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ojo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+  <%= stylesheet_link_tag "normalize", :media => "all" %>
+  <%= stylesheet_link_tag "ojo", :media => "all" %>
+
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div id="ojo-content">
+    <h1>Ojo</h1>
+    <hr/>
+    <p>Ojo version: <span id="js-ojo_version"><%= @ojo_gem_version %></span></p>
+    <p>Parent Application: <span id="js-parent_application"><%= @parent_application_name %></span></p>
+    <p>Data location: <span id="js-ojo_data_location"><%= @ojo_data_location %></span></p>
+    <hr/>
+    <%= yield %>
+  </div>
+</body>
+</html>
+
+

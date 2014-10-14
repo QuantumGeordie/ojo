@@ -1,0 +1,14 @@
+<h1>Index</h1>
+<h2>data sources</h2>
+
+<table class="branches">
+  <tr>
+    <th>branch name</th>
+  </tr>
+
+  <% @branches.each do |branch| %>
+    <tr class="branch">
+      <td class="branch_name"><%= branch %></td>
+    </tr>
+  <% end %>
+</table>

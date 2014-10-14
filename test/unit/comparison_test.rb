@@ -27,7 +27,7 @@ class ComparisonTest < Ojo::OjoTestCase
     generate_image_with_shapes(file_2, '200x200', shapes)
     assert File.exist?(file_2)
 
-    r = Ojo.compare @location, 'branch_1', 'branch_2'
+    r = Ojo.compare('branch_1', 'branch_2')
 
     assert r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -60,7 +60,7 @@ class ComparisonTest < Ojo::OjoTestCase
     generate_image_with_shapes(file_2, '200x200', shapes)
     assert File.exist?(file_2)
 
-    r = Ojo.compare @location, 'branch_1', 'branch_2'
+    r = Ojo.compare('branch_1', 'branch_2')
 
     refute r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -73,7 +73,6 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal file_2, r[1][:results]['test_one.png'][:file_2]
   end
 
-
   private
 
   def create_location_directories
@@ -83,6 +82,8 @@ class ComparisonTest < Ojo::OjoTestCase
 
     FileUtils.mkdir_p(@branch_1)
     FileUtils.mkdir_p(@branch_2)
+
+    Ojo.location = @location
   end
 
   def remove_location_directories

@@ -1,5 +1,8 @@
+require 'rake'
 require 'rake/testtask'
 require "bundler/gem_tasks"
+
+require 'ojo'
 
 namespace :test do
   desc 'unit tests'
@@ -9,7 +12,6 @@ namespace :test do
     t.pattern = 'test/unit/**/*_test.rb'
     t.verbose = false
   end
-
 end
 
 task :test => [ 'test:units' ]

@@ -1,3 +1,4 @@
+require 'ojo/rails/engine' if defined?(Rails)
 require 'ojo/version'
 require 'ojo/comparison'
 require 'ojo/option_parsing'

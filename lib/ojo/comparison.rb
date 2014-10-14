@@ -2,17 +2,17 @@ module Ojo
   require 'open4'
   require 'fileutils'
 
-  def self.compare(location, branch_1, branch_2)
-    files_1 = Dir[File.join(location, branch_1, '*.png')]
-    files_2 = Dir[File.join(location, branch_2, '*.png')]
+  def self.compare(branch_1, branch_2)
+    files_1 = Dir[File.join(self.location, branch_1, '*.png')]
+    files_2 = Dir[File.join(self.location, branch_2, '*.png')]
 
-    FileUtils.mkdir_p(File.join(location, 'diff'))
+    FileUtils.mkdir_p(File.join(self.location, 'diff'))
 
     all_same = true
-    results = { :location => location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
+    results = { :location => self.location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
 
     files_1.count.times do |i|
-      diff_file = File.join(location, 'diff', File.basename(files_1[i]))
+      diff_file = File.join(self.location, 'diff', File.basename(files_1[i]))
 
       output = nil
       status = run_comparison(files_1[i], files_2[i], 'ae', '2%', diff_file) do |out|

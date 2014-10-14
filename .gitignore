@@ -13,4 +13,6 @@
 *.a
 mkmf.log
 
+/test/test_app/tmp
+
 .ojorc
