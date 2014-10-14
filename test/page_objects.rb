@@ -3,12 +3,11 @@ require 'ae_page_objects'
 ActiveSupport::Dependencies.autoload_paths << 'test'
 
 module PageObjects
-  module Ojo
+  module TestApp
     class Site < ::AePageObjects::Site
 
     end
   end
 end
 
-PageObjects::Ojo::Site.initialize!
-
+PageObjects::TestApp::Site.initialize!

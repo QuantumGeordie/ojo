@@ -1,9 +1,9 @@
 require 'ojo/rails/engine' if defined?(Rails)
 require 'ojo/version'
 require 'ojo/comparison'
-require 'ojo/option_parsing'
-require 'ojo/initialization'
+require 'ojo/locations'
 require 'ojo/output'
+require 'ojo/screenshot'
 
 require 'collimator'
 

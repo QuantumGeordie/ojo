@@ -1,10 +1,3 @@
-
-desc 'from engine'
-task :engine_do_something do
-  puts 'the rake task did something from the engine'
-  # puts caller.inspect
-end
-
 namespace :ojo do
   desc 'use ojo to compare two branches'
   task :compare, [:branch_1, :branch_2] => :environment do |t, args|
