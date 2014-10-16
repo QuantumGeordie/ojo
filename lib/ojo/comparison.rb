@@ -3,40 +3,64 @@ module Ojo
   require 'fileutils'
 
   def self.compare(branch_1, branch_2)
-    files_1 = Dir[File.join(self.location, branch_1, '*.png')]
-    files_2 = Dir[File.join(self.location, branch_2, '*.png')]
+
+    files_1 = Dir[File.join(self.location, branch_1, '*.png')].map{ |f| File.basename(f) }
+    files_2 = Dir[File.join(self.location, branch_2, '*.png')].map{ |f| File.basename(f) }
+
+    all_files = compile_file_lists(files_1, files_2)
 
     FileUtils.mkdir_p(File.join(self.location, 'diff'))
 
     all_same = true
     results = { :location => self.location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
 
-    files_1.count.times do |i|
-      diff_file = File.join(self.location, 'diff', File.basename(files_1[i]))
+    ProgressBar.start({:min => 0, :max => all_files.count, :method => :percent, :step_size => 1})
 
-      output = nil
-      status = run_comparison(files_1[i], files_2[i], 'ae', '2%', diff_file) do |out|
-        output = out
-      end
+    all_files.each do |file|
+      diff_file = File.join(self.location, 'diff', File.basename(file))
 
-      this_same = false
-      red  = green = blue = alpha = all = '_'
-      if status.success?
-        this_same, red, green, blue, alpha, all = unpack_comparison_results(output)
+      file_1 = File.join(location, branch_1, file)
+      file_2 = File.join(location, branch_2, file)
+
+      file_1 = nil unless File.exist?(file_1)
+      file_2 = nil unless File.exist?(file_2)
+
+      if file_1 && file_2
+
+        output = nil
+        status = run_comparison(file_1, file_2, 'ae', '2%', diff_file) do |out|
+          output = out
+        end
+
+        this_same = false
+        red  = green = blue = alpha = all = '_'
+        if status.success?
+          this_same, red, green, blue, alpha, all = unpack_comparison_results(output)
+        else
+          this_same  = false
+          red   = green = blue  = alpha = all   = 'XX'
+          file_diff = 'none'
+        end
+
+        results[:results][file] = { :same => this_same, :file_1 => file_1, :file_2 => file_2 }
+        all_same = all_same && this_same
       else
-        this_same  = false
-        red   = green = blue  = alpha = all   = 'XX'
-        file_diff = 'none'
+        results[:results][file] = { :same => nil, :file_1 => file_1, :file_2 => file_2 }
       end
 
-      results[:results][File.basename(files_1[i])] = { :same => this_same, :file_1 => files_1[i], :file_2 => files_2[i] }
-      all_same = all_same && this_same
+      ProgressBar.increment
     end
 
+    ProgressBar.complete
     [all_same, results]
   end
 
   private
+
+  def self.compile_file_lists(files_1, files_2)
+    all_files = files_1.dup
+    all_files = all_files + files_2.select{ |f2| !files_1.include?(f2) }
+  end
 
   def self.unpack_comparison_results(packed, &unpacked)
     outputs = packed.split(/\n/)
