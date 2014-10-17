@@ -26,24 +26,13 @@ module Ojo
       file_2 = nil unless File.exist?(file_2)
 
       if file_1 && file_2
-
-        output = nil
-        status = run_comparison(file_1, file_2, 'ae', '2%', diff_file) do |out|
-          output = out
-        end
-
-        this_same = false
-        red  = green = blue = alpha = all = '_'
-        if status.success?
-          this_same, red, green, blue, alpha, all = unpack_comparison_results(output)
-        else
-          this_same  = false
-          red   = green = blue  = alpha = all   = 'XX'
-          file_diff = 'none'
-        end
+        comparison_results = run_comparison(file_1, file_2, 'ae', '2%', diff_file)
+        this_same = unpack_comparison_results(comparison_results)
 
         results[:results][file] = { :same => this_same, :file_1 => file_1, :file_2 => file_2 }
         all_same = all_same && this_same
+
+        File.delete(File.join(self.location, 'diff', file)) if this_same
       else
         results[:results][file] = { :same => nil, :file_1 => file_1, :file_2 => file_2 }
       end
@@ -59,10 +48,12 @@ module Ojo
 
   def self.compile_file_lists(files_1, files_2)
     all_files = files_1.dup
-    all_files = all_files + files_2.select{ |f2| !files_1.include?(f2) }
+    all_files + files_2.select{ |f2| !files_1.include?(f2) }
   end
 
-  def self.unpack_comparison_results(packed, &unpacked)
+  def self.unpack_comparison_results(packed)
+    return false if packed.include?('image widths or heights differ')
+
     outputs = packed.split(/\n/)
 
     outputs.map! do |o|
@@ -70,29 +61,17 @@ module Ojo
     end
     outputs.compact!
 
-    red   = ''
-    green = ''
-    blue  = ''
-    alpha = ''
-    all   = ''
-
     same = true
+
     outputs.each do |o|
       parts = o.split(' ')
       same = same && parts[1].to_f == 0
-
-      red   = parts[1] if parts[0].start_with?('red')
-      green = parts[1] if parts[0].start_with?('green')
-      blue  = parts[1] if parts[0].start_with?('blue')
-      alpha = parts[1] if parts[0].start_with?('alpha')
-      all   = parts[1] if parts[0].start_with?('all')
     end
 
-    return [same, red, green, blue, alpha, all]
-    #yield(same, red, green, blue, alpha, all)
+    return same
   end
 
-  def self.run_comparison(file_1, file_2, metric, fuzz_factor, resulting_file, &b)
+  def self.run_comparison(file_1, file_2, metric, fuzz_factor, resulting_file)
     imagemagick_command = "compare -verbose -metric #{metric} -fuzz #{fuzz_factor} #{file_1} #{file_2} #{resulting_file}"
 
     output = nil
@@ -100,9 +79,7 @@ module Ojo
       output = stderr.read
     end
 
-    yield(output) if b
-
-    status
+    output
   end
 
 end
