@@ -5,6 +5,7 @@ gemspec
 
 gem 'minitest'
 gem 'minitest-reporters'
+gem 'mocha'
 gem 'awesome_print'
 gem 'rails', '3.2.16'
 gem 'poltergeist'
