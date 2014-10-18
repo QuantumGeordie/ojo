@@ -21,17 +21,11 @@ module Ojo
       file_1 = nil unless File.exist?(file_1)
       file_2 = nil unless File.exist?(file_2)
 
-      if file_1 && file_2
-        comparison_results = run_comparison(file_1, file_2, 'ae', '2%', diff_file)
-        this_same = unpack_comparison_results(comparison_results)
+      this_same = compare_one_set(file_1, file_2, diff_file)
+      results[:results][file] = { :same => this_same, :file_1 => file_1, :file_2 => file_2 }
+      all_same = all_same && (this_same != false)
 
-        results[:results][file] = { :same => this_same, :file_1 => file_1, :file_2 => file_2 }
-        all_same = all_same && this_same
-
-        File.delete(File.join(self.location, 'diff', file)) if this_same
-      else
-        results[:results][file] = { :same => nil, :file_1 => file_1, :file_2 => file_2 }
-      end
+      File.delete(diff_file) if this_same
 
       ProgressBar.increment
     end
@@ -41,6 +35,15 @@ module Ojo
   end
 
   private
+
+  def self.compare_one_set(file_1, file_2, diff_file)
+    same = nil
+    if file_1 && file_2
+      comparison_results = run_comparison(file_1, file_2, 'ae', '2%', diff_file)
+      same = unpack_comparison_results(comparison_results)
+    end
+    same
+  end
 
   def self.get_branch_files(branch_name)
     Dir[File.join(self.location, branch_name, '*.png')].map{ |f| File.basename(f) }
