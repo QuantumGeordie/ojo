@@ -1,9 +1,5 @@
 module Ojo
   def self.display_to_console(data)
-
-    max_printable_length = 50
-    longest_filename_length = 0
-
     Table.header("Ojo v.#{VERSION}")
     Table.header("file location: #{data[:location]}")
     Table.header(Date.today.strftime('%m/%d/%Y'))
@@ -16,8 +12,12 @@ module Ojo
     failure_count = 0
 
     data[:results].each_key do |basename|
-      file_1 = File.basename(data[:results][basename][:file_1]) unless data[:results][basename][:file_1].nil?
-      file_2 = File.basename(data[:results][basename][:file_2]) unless data[:results][basename][:file_2].nil?
+      file_1 = data[:results][basename][:file_1]
+      file_1 = File.basename(file_1) if file_1
+
+      file_2 = data[:results][basename][:file_2]
+      file_2 = File.basename(file_2) if file_2
+
       same = data[:results][basename][:same]
 
       color = :blue
@@ -32,26 +32,33 @@ module Ojo
         failure_count += 1
       end
 
-      cell_data = result_text
-
-      formatted_file_1 = make_printable_name(file_1, max_printable_length)
-      formatted_file_2 = make_printable_name(file_2, max_printable_length)
-
-      row_data = [formatted_file_1, formatted_file_2, cell_data]
-      Table.row(:data => row_data, :color => color)
+      one_row file_1, file_2, result_text, color
     end
 
-    results_message = ['Results: ']
-    results_message << 'All Same' if all_same
-    results_message << "#{failure_count} file#{failure_count > 1 ? 's were' : ' was'} found to be different" unless all_same
-
-    Table.footer(results_message.join(''), :justification => :center)
+    Table.footer(results_message(all_same, failure_count), :justification => :center)
     Table.footer("Difference Files at #{File.join(data[:location], 'diff')}", :justification => :center)
 
     Table.tabulate
   end
 
   private
+
+  def self.one_row(file_1, file_2, result_text, color)
+    max_printable_length = 50
+
+    formatted_file_1 = make_printable_name(file_1, max_printable_length)
+    formatted_file_2 = make_printable_name(file_2, max_printable_length)
+
+    row_data = [formatted_file_1, formatted_file_2, result_text]
+    Table.row(:data => row_data, :color => color)
+  end
+
+  def self.results_message(same, failure_count)
+    results_message = ['Results: ']
+    results_message << 'All Same' if same
+    results_message << "#{failure_count} file#{failure_count > 1 ? 's were' : ' was'} found to be different" unless same
+    results_message.join('')
+  end
 
   def self.make_printable_name(input, max_length)
     output = input

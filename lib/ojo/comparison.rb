@@ -3,11 +3,7 @@ module Ojo
   require 'fileutils'
 
   def self.compare(branch_1, branch_2)
-
-    files_1 = Dir[File.join(self.location, branch_1, '*.png')].map{ |f| File.basename(f) }
-    files_2 = Dir[File.join(self.location, branch_2, '*.png')].map{ |f| File.basename(f) }
-
-    all_files = compile_file_lists(files_1, files_2)
+    all_files = compile_file_lists(get_branch_files(branch_1), get_branch_files(branch_2))
 
     FileUtils.mkdir_p(File.join(self.location, 'diff'))
 
@@ -45,6 +41,10 @@ module Ojo
   end
 
   private
+
+  def self.get_branch_files(branch_name)
+    Dir[File.join(self.location, branch_name, '*.png')].map{ |f| File.basename(f) }
+  end
 
   def self.compile_file_lists(files_1, files_2)
     all_files = files_1.dup
