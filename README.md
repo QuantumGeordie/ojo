@@ -2,6 +2,7 @@
 
 Ojo is not fancy. it just does a simple comparison of two sets of screenshots. the idea is that there is a set of tests or scripts that will compile the two sets (for example, one from a master branch and another from a feature branch). running the rake task that `Ojo` adds to the rails app will tell you if the two sets of files differ. the rake task is `ojo:compare[branch_1,branch_2]`.
 
+[![Build Status](https://travis-ci.org/QuantumGeordie/ojo.svg)](https://travis-ci.org/QuantumGeordie/ojo)
 [![Code Climate](https://codeclimate.com/github/QuantumGeordie/ojo/badges/gpa.svg)](https://codeclimate.com/github/QuantumGeordie/ojo)
 
 ## Installation
