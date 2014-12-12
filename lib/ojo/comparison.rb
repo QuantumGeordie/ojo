@@ -5,18 +5,18 @@ module Ojo
   def self.compare(branch_1, branch_2)
     all_files = compile_file_lists(get_branch_files(branch_1), get_branch_files(branch_2))
 
-    FileUtils.mkdir_p(File.join(self.location, 'diff'))
+    FileUtils.mkdir_p(File.join(Ojo.configuration.location, 'diff'))
 
     all_same = true
-    results = { :location => self.location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
+    results = { :location => Ojo.configuration.location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
 
     ProgressBar.start({:min => 0, :max => all_files.count, :method => :percent, :step_size => 1})
 
     all_files.each do |file|
-      diff_file = File.join(self.location, 'diff', File.basename(file))
+      diff_file = File.join(Ojo.configuration.location, 'diff', File.basename(file))
 
-      file_1 = File.join(location, branch_1, file)
-      file_2 = File.join(location, branch_2, file)
+      file_1 = File.join(Ojo.configuration.location, branch_1, file)
+      file_2 = File.join(Ojo.configuration.location, branch_2, file)
 
       file_1 = nil unless File.exist?(file_1)
       file_2 = nil unless File.exist?(file_2)
@@ -39,14 +39,28 @@ module Ojo
   def self.compare_one_set(file_1, file_2, diff_file)
     same = nil
     if file_1 && file_2
-      comparison_results = run_comparison(file_1, file_2, 'ae', '2%', diff_file)
+      do_some_file_size_stuff file_1, file_2
+
+      comparison_results = compare_files(file_1, file_2, Ojo.configuration.metric, Ojo.configuration.fuzz, diff_file)
       same = unpack_comparison_results(comparison_results)
     end
     same
   end
 
+  def self.get_file_dimensions(file)
+    im = "identify -format '%[fx:w]x%[fx:h]' #{file}"
+
+    output = nil
+    status = Open4::popen4(im) do |pid, stdin, stdout, stderr|
+      output = stdout.read
+    end
+    raise "problem getting dimensions of #{file}" unless status.success?
+    output.chomp
+  end
+
+
   def self.get_branch_files(branch_name)
-    Dir[File.join(self.location, branch_name, '*.png')].map{ |f| File.basename(f) }
+    Dir[File.join(Ojo.configuration.location, branch_name, '*.png')].map{ |f| File.basename(f) }
   end
 
   def self.compile_file_lists(files_1, files_2)
@@ -74,11 +88,16 @@ module Ojo
     return same
   end
 
-  def self.run_comparison(file_1, file_2, metric, fuzz_factor, resulting_file)
-    imagemagick_command = "compare -verbose -metric #{metric} -fuzz #{fuzz_factor} #{file_1} #{file_2} #{resulting_file}"
+  def self.compare_files(file_1, file_2, metric, fuzz_factor, resulting_file)
+    command = "compare -verbose -metric #{metric} -fuzz #{fuzz_factor} #{file_1} #{file_2} #{resulting_file}"
+    do_imagemagick(command)
+  end
 
+  # def self.compare(file_1, file_2, metric, fuzz_factor, resulting_file)
+
+  def self.do_imagemagick(command_string)
     output = nil
-    status = Open4::popen4(imagemagick_command) do |pid, stdin, stdout, stderr|
+    status = Open4::popen4(command_string) do |pid, stdin, stdout, stderr|
       output = stderr.read
     end
 

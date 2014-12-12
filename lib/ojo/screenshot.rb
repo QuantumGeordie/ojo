@@ -12,7 +12,7 @@ module Ojo
 
   def self.screenshot(group_name, base_name)
     raise 'No screenshot method defined for Ojo.screenshoter!' unless @screenshotter
-    raise 'No screenshot location defined for Ojo.location!' unless @location
+    raise 'No screenshot location defined for Ojo.location!' unless Ojo.configuration.location
 
     filename = File.join(location, group_name, "#{base_name}.png")
 

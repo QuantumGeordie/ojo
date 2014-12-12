@@ -1,17 +1,16 @@
 module Ojo
-  @location = nil
-
   def self.location=(location)
-    @location = location
+    Ojo.configure unless Ojo.configuration
+    Ojo.configuration.location = location
   end
 
   def self.location
-    @location
+    Ojo.configuration.location
   end
 
   def self.get_data_sets_available
     data_sets = []
-    if @location
+    if Ojo.configuration.location
       data_sets = Dir[File.join(location, '*')].select{ |d| File.directory?(d) && File.basename(d) != 'diff' }.map{ |d| File.basename(d) }
     end
     data_sets
