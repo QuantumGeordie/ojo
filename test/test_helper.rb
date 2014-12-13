@@ -27,6 +27,8 @@ require 'open4'
 
 require File.expand_path('../../lib/ojo', __FILE__)
 
+Ojo.configure
+
 module Ojo
   class OjoTestCase < Minitest::Test
 

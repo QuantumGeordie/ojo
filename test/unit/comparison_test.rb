@@ -84,7 +84,7 @@ class ComparisonTest < Ojo::OjoTestCase
     shapes << "rectangle 30,10 100,60"
 
     file_1 = File.join(@branch_1, 'test_one.png')
-    generate_image_with_shapes(file_1, '200x200', shapes)
+    generate_image_with_shapes(file_1, '205x200', shapes)
     assert File.exist?(file_1)
 
     file_2 = File.join(@branch_2, 'test_one.png')
@@ -156,7 +156,7 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal nil,   r[1][:results][File.basename(file_2_3)][:same]
     assert_equal false, r[1][:results][File.basename(file_1_4)][:same]
 
-    diff_location = File.join(Ojo.location, 'diff')
+    diff_location = File.join(Ojo.configuration.location, 'diff')
     assert_equal 1, Dir[File.join(diff_location, '*.png')].count
     refute File.exist?(File.join(diff_location, File.basename(file_1_1)))
     refute File.exist?(File.join(diff_location, File.basename(file_1_2)))
@@ -167,14 +167,14 @@ class ComparisonTest < Ojo::OjoTestCase
   private
 
   def create_location_directories
-    @location = File.expand_path('../../tmp')
+    @location = File.absolute_path('../../tmp', __FILE__)
     @branch_1 = File.join(@location, 'branch_1')
     @branch_2 = File.join(@location, 'branch_2')
 
     FileUtils.mkdir_p(@branch_1)
     FileUtils.mkdir_p(@branch_2)
 
-    Ojo.location = @location
+    Ojo.configuration.location = @location
   end
 
   def remove_location_directories
