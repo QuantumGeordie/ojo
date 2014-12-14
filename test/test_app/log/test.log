@@ -2760,3 +2760,139 @@ ActionController::RoutingError (No route matches [GET] "/assets/local_app.css"):
   /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
 
 
+Started GET "/" for 127.0.0.1 at 2014-12-14 00:27:44 -0800
+Connecting to database specified by database.yml
+Processing by LocalController#index as HTML
+  Rendered local/index.html.erb within layouts/local (1.0ms)
+Completed 200 OK in 7.4ms (Views: 7.2ms | ActiveRecord: 0.0ms)
+Started GET "/assets/local_app.css" for 127.0.0.1 at 2014-12-14 00:27:45 -0800
+Served asset /local_app.css - 404 Not Found (0ms)
+
+ActionController::RoutingError (No route matches [GET] "/assets/local_app.css"):
+  actionpack (3.2.16) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.16) lib/rails/rack/logger.rb:32:in `call_app'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `block in call'
+  activesupport (3.2.16) lib/active_support/tagged_logging.rb:22:in `tagged'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.5) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.5) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.16) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.5) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/static.rb:63:in `call'
+  railties (3.2.16) lib/rails/engine.rb:484:in `call'
+  railties (3.2.16) lib/rails/application.rb:231:in `call'
+  rack (1.4.5) lib/rack/builder.rb:134:in `call'
+  rack (1.4.5) lib/rack/urlmap.rb:64:in `block in call'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `each'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `call'
+  capybara (2.2.1) lib/capybara/server.rb:19:in `call'
+  rack (1.4.5) lib/rack/handler/webrick.rb:59:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+Started GET "/" for 127.0.0.1 at 2014-12-14 00:28:09 -0800
+Connecting to database specified by database.yml
+Processing by LocalController#index as HTML
+  Rendered local/index.html.erb within layouts/local (0.7ms)
+Completed 200 OK in 5.1ms (Views: 5.0ms | ActiveRecord: 0.0ms)
+Started GET "/assets/local_app.css" for 127.0.0.1 at 2014-12-14 00:28:09 -0800
+Served asset /local_app.css - 404 Not Found (0ms)
+
+ActionController::RoutingError (No route matches [GET] "/assets/local_app.css"):
+  actionpack (3.2.16) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.16) lib/rails/rack/logger.rb:32:in `call_app'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `block in call'
+  activesupport (3.2.16) lib/active_support/tagged_logging.rb:22:in `tagged'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.5) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.5) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.16) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.5) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/static.rb:63:in `call'
+  railties (3.2.16) lib/rails/engine.rb:484:in `call'
+  railties (3.2.16) lib/rails/application.rb:231:in `call'
+  rack (1.4.5) lib/rack/builder.rb:134:in `call'
+  rack (1.4.5) lib/rack/urlmap.rb:64:in `block in call'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `each'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `call'
+  capybara (2.2.1) lib/capybara/server.rb:19:in `call'
+  rack (1.4.5) lib/rack/handler/webrick.rb:59:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+Started GET "/" for 127.0.0.1 at 2014-12-14 00:28:50 -0800
+Connecting to database specified by database.yml
+Processing by LocalController#index as HTML
+  Rendered local/index.html.erb within layouts/local (0.9ms)
+Completed 200 OK in 6.5ms (Views: 6.3ms | ActiveRecord: 0.0ms)
+Started GET "/assets/local_app.css" for 127.0.0.1 at 2014-12-14 00:28:50 -0800
+Served asset /local_app.css - 404 Not Found (0ms)
+
+ActionController::RoutingError (No route matches [GET] "/assets/local_app.css"):
+  actionpack (3.2.16) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.16) lib/rails/rack/logger.rb:32:in `call_app'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `block in call'
+  activesupport (3.2.16) lib/active_support/tagged_logging.rb:22:in `tagged'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.5) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.5) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.16) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.5) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/static.rb:63:in `call'
+  railties (3.2.16) lib/rails/engine.rb:484:in `call'
+  railties (3.2.16) lib/rails/application.rb:231:in `call'
+  rack (1.4.5) lib/rack/builder.rb:134:in `call'
+  rack (1.4.5) lib/rack/urlmap.rb:64:in `block in call'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `each'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `call'
+  capybara (2.2.1) lib/capybara/server.rb:19:in `call'
+  rack (1.4.5) lib/rack/handler/webrick.rb:59:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+Started GET "/" for 127.0.0.1 at 2014-12-14 00:29:38 -0800
+Connecting to database specified by database.yml
+Processing by LocalController#index as HTML
+  Rendered local/index.html.erb within layouts/local (0.7ms)
+Completed 200 OK in 5.3ms (Views: 5.1ms | ActiveRecord: 0.0ms)
+Started GET "/assets/local_app.css" for 127.0.0.1 at 2014-12-14 00:29:38 -0800
+Served asset /local_app.css - 404 Not Found (0ms)
+
+ActionController::RoutingError (No route matches [GET] "/assets/local_app.css"):
+  actionpack (3.2.16) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.16) lib/rails/rack/logger.rb:32:in `call_app'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `block in call'
+  activesupport (3.2.16) lib/active_support/tagged_logging.rb:22:in `tagged'
+  railties (3.2.16) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.5) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.5) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.16) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.5) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.16) lib/action_dispatch/middleware/static.rb:63:in `call'
+  railties (3.2.16) lib/rails/engine.rb:484:in `call'
+  railties (3.2.16) lib/rails/application.rb:231:in `call'
+  rack (1.4.5) lib/rack/builder.rb:134:in `call'
+  rack (1.4.5) lib/rack/urlmap.rb:64:in `block in call'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `each'
+  rack (1.4.5) lib/rack/urlmap.rb:49:in `call'
+  capybara (2.2.1) lib/capybara/server.rb:19:in `call'
+  rack (1.4.5) lib/rack/handler/webrick.rb:59:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  /Users/geordie/.rvm/rubies/ruby-2.1.2/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
