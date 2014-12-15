@@ -79,8 +79,8 @@ class ManagerTest < Ojo::OjoTestCase
     sa = out.string.split("\n")
 
     assert_equal '+-----------------------------------------------------------------------------------------------------------------------------------------+', sa[0]
-    assert_equal '|                                                               Ojo v.0.0.2                                                               |', sa[1]
-    assert_equal '|                                             file location: /Users/geordie/src/gems/ojo/tmp                                              |', sa[2]
+    assert_match 'Ojo v.',                                                                                                                                      sa[1]
+    assert_match 'file location:',                                                                                                                              sa[2]
     assert_equal '|                                                               10/01/2014                                                                |', sa[3]
     assert_equal '+-----------------------------------------------------------------------------------------------------------------------------------------+', sa[4]
     assert_equal '|  branch_1                                                    |  branch_2                                                    |  Results  |', sa[5]
@@ -88,7 +88,7 @@ class ManagerTest < Ojo::OjoTestCase
     assert_equal "|  \e[1;32mtest_one.png\e[0m                                                |  \e[1;32mtest_one.png\e[0m                                                |   \e[1;32mPASS\e[0m    |", sa[7]
     assert_equal '+-----------------------------------------------------------------------------------------------------------------------------------------+', sa[8]
     assert_equal '|                                                            Results: All Same                                                            |', sa[9]
-    assert_equal '|                                        Difference Files at /Users/geordie/src/gems/ojo/tmp/diff                                         |', sa[10]
+    assert_match 'Difference Files at',                                                                                                                         sa[10]
     assert_equal '+-----------------------------------------------------------------------------------------------------------------------------------------+', sa[11]
   end
 
