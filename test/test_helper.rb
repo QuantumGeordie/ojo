@@ -1,3 +1,8 @@
+if ENV['CODECLIMATE_REPO_TOKEN']
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+end
+
 require 'rubygems'
 require 'bundler'
 
@@ -56,6 +61,29 @@ module Ojo
       raise "generate image: #{err}" unless status.success?
     end
 
+    def create_location_directories
+      @location = File.absolute_path('../../tmp', __FILE__)
+      @branch_1 = File.join(@location, 'branch_1')
+      @branch_2 = File.join(@location, 'branch_2')
+
+      FileUtils.mkdir_p(@branch_1)
+      FileUtils.mkdir_p(@branch_2)
+
+      ::Ojo.configuration.location = @location
+    end
+
+    def remove_location_directories
+      FileUtils.rm_rf Dir[File.join(@location, '*')]
+    end
+
+    def capture_output
+      out = StringIO.new
+      $stdout = out
+      yield
+      return out
+    ensure
+      $stdout = STDOUT
+    end
 
   end
 end

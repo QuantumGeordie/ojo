@@ -7,6 +7,7 @@ class ComparisonTest < Ojo::OjoTestCase
     create_location_directories
     Collimator::ProgressBar.stubs(:put_current_progress)
     Collimator::ProgressBar.stubs(:complete)
+    @ojo = Ojo::Ojo.new
   end
 
   def teardown
@@ -29,7 +30,7 @@ class ComparisonTest < Ojo::OjoTestCase
     generate_image_with_shapes(file_2, '200x200', shapes)
     assert File.exist?(file_2)
 
-    r = Ojo.compare('branch_1', 'branch_2')
+    r = @ojo.compare('branch_1', 'branch_2')
 
     assert r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -62,7 +63,7 @@ class ComparisonTest < Ojo::OjoTestCase
     generate_image_with_shapes(file_2, '200x200', shapes)
     assert File.exist?(file_2)
 
-    r = Ojo.compare('branch_1', 'branch_2')
+    r = @ojo.compare('branch_1', 'branch_2')
 
     refute r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -91,7 +92,7 @@ class ComparisonTest < Ojo::OjoTestCase
     generate_image_with_shapes(file_2, '200x210', shapes)
     assert File.exist?(file_2)
 
-    r = Ojo.compare('branch_1', 'branch_2')
+    r = @ojo.compare('branch_1', 'branch_2')
 
     refute r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -123,7 +124,7 @@ class ComparisonTest < Ojo::OjoTestCase
     file_2_3 = File.join(@branch_2, 'file_three.png')
     generate_image_with_shapes(file_2_3, '200x220', shapes)
 
-    r = Ojo.compare('branch_1', 'branch_2')
+    r = @ojo.compare('branch_1', 'branch_2')
 
     assert r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -136,7 +137,7 @@ class ComparisonTest < Ojo::OjoTestCase
     generate_image_with_shapes(file_1_4, '50x50', ["rectangle 22,12 24,14"])
     generate_image_with_shapes(file_2_4, '50x50', ["rectangle 20,10 22,12"])
 
-    r = Ojo.compare('branch_1', 'branch_2')
+    r = @ojo.compare('branch_1', 'branch_2')
 
     refute r[0], 'the all_pass status'
     assert_equal @location, r[1][:location]
@@ -164,22 +165,4 @@ class ComparisonTest < Ojo::OjoTestCase
     assert File.exist?(File.join(diff_location, File.basename(file_1_4)))
   end
 
-  private
-
-  def create_location_directories
-    @location = File.absolute_path('../../tmp', __FILE__)
-    @branch_1 = File.join(@location, 'branch_1')
-    @branch_2 = File.join(@location, 'branch_2')
-
-    FileUtils.mkdir_p(@branch_1)
-    FileUtils.mkdir_p(@branch_2)
-
-    Ojo.configuration.location = @location
-  end
-
-  def remove_location_directories
-    FileUtils.rm_rf(@branch_1)
-    FileUtils.rm_rf(@branch_2)
-    FileUtils.rm_rf(File.join(@location, 'diff'))
-  end
 end

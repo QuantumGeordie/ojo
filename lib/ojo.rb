@@ -7,7 +7,10 @@ require 'ojo/locations'
 require 'ojo/output'
 require 'ojo/screenshot'
 require 'ojo/configuration'
-require 'ojo/image_sizing'
+require 'ojo/file_sizer'
+require 'ojo/image_magician'
+require 'ojo/data_sets'
+require 'ojo/manager'
 
 module Ojo
   include Collimator

@@ -12,3 +12,7 @@ gem 'poltergeist'
 gem 'capybara'
 gem 'ae_page_objects', '1.3.0'
 gem 'sqlite3'
+
+group :test do
+  gem 'codeclimate-test-reporter', require: nil
+end
