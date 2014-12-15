@@ -75,5 +75,15 @@ module Ojo
     def remove_location_directories
       FileUtils.rm_rf Dir[File.join(@location, '*')]
     end
+
+    def capture_output
+      out = StringIO.new
+      $stdout = out
+      yield
+      return out
+    ensure
+      $stdout = STDOUT
+    end
+
   end
 end

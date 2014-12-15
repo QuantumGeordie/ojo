@@ -1,5 +1,7 @@
 module Ojo
   class Output
+    include Collimator::Table
+
     def display_to_console(data)
       format_table data
 
@@ -27,10 +29,10 @@ module Ojo
     private
 
     def format_table_footer(failure_count, data)
-      Table.footer(results_message(failure_count == 0, failure_count), :justification => :center)
-      Table.footer("Difference Files at #{File.join(data[:location], 'diff')}", :justification => :center)
+      Collimator::Table.footer(results_message(failure_count == 0, failure_count), :justification => :center)
+      Collimator::Table.footer("Difference Files at #{File.join(data[:location], 'diff')}", :justification => :center)
 
-      Table.tabulate
+      Collimator::Table.tabulate
     end
 
     def file_basename(filename)
@@ -44,17 +46,17 @@ module Ojo
     end
 
     def format_table_header(data)
-      Table.header("Ojo v.#{VERSION}")
-      Table.header("file location: #{data[:location]}")
-      Table.header(Date.today.strftime('%m/%d/%Y'))
+      Collimator::Table.header("Ojo v.#{VERSION}")
+      Collimator::Table.header("file location: #{data[:location]}")
+      Collimator::Table.header(Date.today.strftime('%m/%d/%Y'))
     end
 
     def format_table(data)
       format_table_header data
 
-      Table.column(data[:branch_1], :width => 60, :padding => 2, :justification => :left)
-      Table.column(data[:branch_2], :width => 60, :padding => 2, :justification => :left)
-      Table.column('Results', :width => 11, :justification => :center)
+      Collimator::Table.column(data[:branch_1], :width => 60, :padding => 2, :justification => :left)
+      Collimator::Table.column(data[:branch_2], :width => 60, :padding => 2, :justification => :left)
+      Collimator::Table.column('Results', :width => 11, :justification => :center)
     end
 
     def one_row(file_1, file_2, result_text, color)
@@ -64,7 +66,7 @@ module Ojo
       formatted_file_2 = make_printable_name(file_2, max_printable_length)
 
       row_data = [formatted_file_1, formatted_file_2, result_text]
-      Table.row(:data => row_data, :color => color)
+      Collimator::Table.row(:data => row_data, :color => color)
     end
 
     def results_message(same, failure_count)
