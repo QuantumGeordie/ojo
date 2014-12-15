@@ -4,6 +4,7 @@ Ojo is not fancy. it just does a simple comparison of two sets of screenshots. t
 
 [![Build Status](https://travis-ci.org/QuantumGeordie/ojo.svg)](https://travis-ci.org/QuantumGeordie/ojo)
 [![Code Climate](https://codeclimate.com/github/QuantumGeordie/ojo/badges/gpa.svg)](https://codeclimate.com/github/QuantumGeordie/ojo)
+[![Test Coverage](https://codeclimate.com/github/QuantumGeordie/ojo/badges/coverage.svg)](https://codeclimate.com/github/QuantumGeordie/ojo)
 
 ## Installation
 
@@ -25,7 +26,9 @@ Or install it yourself as:
 
 in a rails initializer do something like this to tell `Ojo` where the files to compare are.
 
-`Ojo.location = '/path/to/screenshots'`
+    Ojo.configure do |config|
+      config.location = '/path/to/screenshots'
+    end
 
 ### Screenshotter
 

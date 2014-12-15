@@ -2,8 +2,7 @@ require 'phantom_test_helper'
 
 class TestAppTest < OjoApp::PhantomTestCase
   def test_index_page
-    index_page = PageObjects::TestApp::IndexPage.visit
-
+    PageObjects::TestApp::IndexPage.visit
     Ojo.screenshot(branch_name, __method__)
   end
 end

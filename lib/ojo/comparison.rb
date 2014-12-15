@@ -13,11 +13,8 @@ module Ojo
       all_files.each do |file|
         diff_file = File.join(::Ojo.configuration.location, 'diff', File.basename(file))
 
-        file_1 = File.join(::Ojo.configuration.location, branch_1, file)
-        file_2 = File.join(::Ojo.configuration.location, branch_2, file)
-
-        file_1 = nil unless File.exist?(file_1)
-        file_2 = nil unless File.exist?(file_2)
+        file_1 = make_comparable_filename(branch_1, file)
+        file_2 = make_comparable_filename(branch_2, file)
 
         this_same = compare_one_set(file_1, file_2, diff_file)
         results[:results][file] = { :same => this_same, :file_1 => file_1, :file_2 => file_2 }
@@ -34,13 +31,18 @@ module Ojo
 
     private
 
+    def make_comparable_filename(branch, file_base)
+      name = File.join(::Ojo.configuration.location, branch, file_base)
+      name = nil unless File.exist?(name)
+      name
+    end
+
     def compare_one_set(file_1, file_2, diff_file)
       same = nil
       if file_1 && file_2
         ::Ojo::FileSizer.new.make_files_same_size(file_1, file_2)
 
-        comparison_results = compare_files(file_1, file_2, ::Ojo.configuration.metric, ::Ojo.configuration.fuzz, diff_file)
-        same = unpack_comparison_results(comparison_results)
+        same = compare_files(file_1, file_2, ::Ojo.configuration.metric, ::Ojo.configuration.fuzz, diff_file)
       end
       same
     end
@@ -54,29 +56,11 @@ module Ojo
       all_files + files_2.select{ |f2| !files_1.include?(f2) }
     end
 
-    def unpack_comparison_results(packed)
-      return false if packed.include?('image widths or heights differ')
-
-      outputs = packed.split(/\n/)
-
-      outputs.map! do |o|
-        o.strip if o.strip.start_with?('red', 'green', 'blue', 'alpha', 'all')
-      end
-      outputs.compact!
-
-      same = true
-
-      outputs.each do |o|
-        parts = o.split(' ')
-        same = same && parts[1].to_f == 0
-      end
-
-      return same
-    end
-
     def compare_files(file_1, file_2, metric, fuzz_factor, resulting_file)
       im = "compare -verbose -metric #{metric} -fuzz #{fuzz_factor} #{file_1} #{file_2} #{resulting_file}"
-      ::Ojo::ImageMagician.new.make_magic(im)
+      raw_result = ::Ojo::ImageMagician.new.make_magic(im)
+
+      ::Ojo::ImageMagician.new.unpack_comparison_result raw_result
     end
   end
 end
