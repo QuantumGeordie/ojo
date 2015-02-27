@@ -112,6 +112,13 @@ class ManagerTest < Ojo::OjoTestCase
       end
     end
     assert_compare_output out.string, %w(branch_1 branch_1a)
+
+    out = capture_output do
+      Date.stub :today, Date.parse('1/10/2014') do
+        @manager.compare branch_1_name, branch_2_name
+      end
+    end
+    assert_compare_output out.string, %w(branch_1 branch_2)
   end
 
   private

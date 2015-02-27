@@ -32,7 +32,6 @@ require 'page_objects'
 Capybara.default_driver = :poltergeist
 Capybara.javascript_driver = :poltergeist
 
-
 module OjoApp
   class PhantomTestCase < Minitest::Test
     include Capybara::DSL
@@ -40,28 +39,24 @@ module OjoApp
     def setup
       Ojo.screenshotter = lambda do |filename|
         page.save_screenshot(filename)
-        puts "Screenshot taken and saved to #{filename}"
       end
       Capybara.reset!
     end
 
     def teardown
       Capybara.reset!
+      remove_test_screenshots
     end
 
     private
-
-    def screenshot_path
-      File.join(Rails.root, 'tmp', 'screenshots')
-    end
-
-    def screenshot_file(name)
-      File.join(screenshot_path, branch_name, "#{name}.png")
-    end
 
     def branch_name
       `git rev-parse --abbrev-ref HEAD`.chomp
     end
 
+    def remove_test_screenshots
+      branch_location = File.join(Ojo.configuration.location, branch_name)
+      FileUtils.rm_rf branch_location
+    end
   end
 end
