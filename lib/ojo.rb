@@ -1,4 +1,5 @@
 require 'collimator'
+require 'open4'
 
 require 'ojo/rails/engine' if defined?(Rails)
 require 'ojo/version'

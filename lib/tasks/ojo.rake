@@ -3,8 +3,8 @@ require 'fileutils'
 namespace :ojo do
   desc 'use ojo to compare two branches'
   task :compare, [:branch_1, :branch_2] => :environment do |t, args|
-    branch_1 = args.fetch(:branch_1, nil)
-    branch_2 = args.fetch(:branch_2, nil)
+    branch_1 = args[:branch_1]
+    branch_2 = args[:branch_2]
 
     Ojo::Manager.new.compare(branch_1, branch_2)
   end
@@ -29,6 +29,5 @@ namespace :ojo do
     task :all => :environment do |t|
       Ojo::Manager.new.clear_all
     end
-
   end
 end

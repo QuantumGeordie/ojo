@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    ojo (0.0.2)
+    ojo (1.0.0)
       collimator
       open4
 
