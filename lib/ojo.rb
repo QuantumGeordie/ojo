@@ -12,6 +12,7 @@ require 'ojo/file_sizer'
 require 'ojo/image_magician'
 require 'ojo/data_sets'
 require 'ojo/manager'
+require 'ojo/sorter'
 
 module Ojo
   include Collimator

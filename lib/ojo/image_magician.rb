@@ -18,7 +18,7 @@ module Ojo
         same = same && value.to_f == 0
       end
 
-      return same
+      [same, color_values[:all].to_i]
     end
 
     private
