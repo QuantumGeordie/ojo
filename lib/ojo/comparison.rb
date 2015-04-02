@@ -6,7 +6,7 @@ module Ojo
       FileUtils.mkdir_p(File.join(::Ojo.configuration.location, 'diff'))
 
       all_same = true
-      results = { :location => ::Ojo.configuration.location, :branch_1 => branch_1, :branch_2 => branch_2, :results => {} }
+      results = { :location => ::Ojo.configuration.location, :branch_1 => branch_1, :branch_2 => branch_2, :results => [] }
 
       ::Ojo::ProgressBar.start({:min => 0, :max => all_files.count, :method => :percent, :step_size => 1})
 
@@ -16,8 +16,8 @@ module Ojo
         file_1 = make_comparable_filename(branch_1, file)
         file_2 = make_comparable_filename(branch_2, file)
 
-        this_same = compare_one_set(file_1, file_2, diff_file)
-        results[:results][file] = { :same => this_same, :file_1 => file_1, :file_2 => file_2 }
+        this_same, not_same_pixel_count = compare_one_set(file_1, file_2, diff_file)
+        results[:results] << { :same => this_same, :file_1 => file_1, :file_2 => file_2, :not_same_pixel_count => not_same_pixel_count }
         all_same = all_same && (this_same != false)
 
         File.delete(diff_file) if this_same

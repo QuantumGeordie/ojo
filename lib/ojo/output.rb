@@ -1,27 +1,42 @@
 module Ojo
   class Output
     include Collimator::Table
+    attr_reader :magnitude_max
+
+    def initialize(magnitude_max)
+      @magnitude_max = magnitude_max
+    end
 
     def display_to_console(data)
       format_table data
 
       failure_count = 0
 
-      data[:results].each_key do |basename|
-        file_1 = file_basename(data[:results][basename][:file_1])
-        file_2 = file_basename(data[:results][basename][:file_2])
+      data[:results].each do |result|
+        filename = file_basename(result[:file_1]) || file_basename(result[:file_2])
 
         color       = :blue
-        result_text = '--'
+        result_text = '-'
+        pixel_count = '-'
 
-        if test_performed?(data[:results][basename])
-          same = data[:results][basename][:same]
-          color = same ? :green : :red
-          result_text = same ? 'PASS' : 'FAIL'
+        if test_performed?(result)
+          same = result[:same]
+          pixel_count = result[:not_same_pixel_count].to_s
+          color = if same
+                    :green
+                  else
+                    pixel_count.to_i > 3 ? :red : :yellow
+                  end
+          unless same
+            if pixel_count == 0
+              pixel_count = 1
+            end
+          end
+          result_text = same ? 'P' : 'F'
           failure_count += 1 unless same
         end
 
-        one_row file_1, file_2, result_text, color
+        one_row filename, result_text, color, pixel_count
       end
       format_table_footer failure_count, data
     end
@@ -49,23 +64,25 @@ module Ojo
       Collimator::Table.header("Ojo v.#{VERSION}")
       Collimator::Table.header("file location: #{data[:location]}")
       Collimator::Table.header(Date.today.strftime('%m/%d/%Y'))
+      Collimator::Table.header("data sets compared: #{data[:branch_1]} & #{data[:branch_2]}")
     end
 
     def format_table(data)
       format_table_header data
 
-      Collimator::Table.column(data[:branch_1], :width => 60, :padding => 2, :justification => :left)
-      Collimator::Table.column(data[:branch_2], :width => 60, :padding => 2, :justification => :left)
-      Collimator::Table.column('Results', :width => 11, :justification => :center)
+      Collimator::Table.column('File', :width => 60, :padding => 2, :justification => :left)
+      Collimator::Table.column('', :width => 3, :justification => :center)
+      Collimator::Table.column('Magnitude', :width => @magnitude_max + 1, :padding => 1, :justification => :left)
     end
 
-    def one_row(file_1, file_2, result_text, color)
+    def one_row(file, result_text, color, magnitude = 0)
       max_printable_length = 50
+      bar_character = "\u2588"
+      magnitude_bar = bar_character * (magnitude.to_i > @magnitude_max ? @magnitude_max : magnitude.to_i)
 
-      formatted_file_1 = make_printable_name(file_1, max_printable_length)
-      formatted_file_2 = make_printable_name(file_2, max_printable_length)
+      formatted_file = make_printable_name(file, max_printable_length)
 
-      row_data = [formatted_file_1, formatted_file_2, result_text]
+      row_data = [formatted_file, result_text, magnitude_bar]
       Collimator::Table.row(:data => row_data, :color => color)
     end
 

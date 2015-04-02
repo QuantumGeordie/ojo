@@ -1,5 +1,7 @@
 module Ojo
   class Manager
+    MAGNITUDE_MAX = 24
+
     def location
       puts "Ojo file location: #{::Ojo.configuration.location}"
     end
@@ -42,7 +44,10 @@ module Ojo
       end
 
       results = ::Ojo::Ojo.new.compare(branch_1, branch_2)
-      ::Ojo::Output.new.display_to_console results[1]
+      sorted_results = ::Ojo::Sorter.new(results[1], MAGNITUDE_MAX).sort
+
+      results[1][:results] = sorted_results
+      ::Ojo::Output.new(MAGNITUDE_MAX).display_to_console results[1]
     end
 
   end

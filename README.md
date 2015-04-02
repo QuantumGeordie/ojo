@@ -68,25 +68,30 @@ After both sets of data have been run, the `Ojo` rake task `ojo:compare[branch_1
 #### run
 
     >> rake ojo:compare[master,login_page_update]
-    +-----------------------------------------------------------------------------------------------------------------------------------------+
-    |                                                               Ojo v.0.0.1                                                               |
-    |                                        file location: /Users/geordie/src/faktory/tmp/appearance                                         |
-    |                                                               10/17/2014                                                                |
-    +-----------------------------------------------------------------------------------------------------------------------------------------+
-    |  master                                                      |  login_page_update                                           |  Results  |
-    |--------------------------------------------------------------+--------------------------------------------------------------+-----------|
-    |  current_user.png                                            |  current_user.png                                            |   FAIL    |
-    |  master_only.png                                             |                                                              |    --     |
-    |  signed_in.png                                               |  signed_in.png                                               |   PASS    |
-    |  test_home.png                                               |  test_home.png                                               |   PASS    |
-    |  user.png                                                    |  user.png                                                    |   FAIL    |
-    |                                                              |  login_update_only.png                                       |    --     |
-    +-----------------------------------------------------------------------------------------------------------------------------------------+
-    |                                               Results: 2 files were found to be different                                               |
-    |                                             Difference Files at /path/to/screenshots/diff                                               |
-    +-----------------------------------------------------------------------------------------------------------------------------------------+
 
-you can see here that not everything passed (or was exactly the same) in each test case. the `user` and `current_user` cases did not pass. to investigate why, you can look at the `diff` directory under `/path/to/screenshots/`. you will see what differences were found in each test case.
+    +---------------------------------------------------------------------------------------------+
+    |                                         Ojo v.1.0.1                                         |
+    |                          file location: /path/to/screenshots                                |
+    |                                         04/02/2015                                          |
+    |                       data sets compared: master & login_page_update                        |
+    +---------------------------------------------------------------------------------------------+
+    |  File                                                        |   | Magnitude                |
+    |--------------------------------------------------------------+---+--------------------------|
+    |  current_user.png                                            | F | ████████████████████████ |
+    |  user.png                                                    | F | █████████████            |
+    |  signed_in.png                                               | P |                          |
+    |  test_home.png                                               | P |                          |
+    |  master_only.png                                             | - |                          |
+    |  login_update_only.png                                       | - |                          |
+    +---------------------------------------------------------------------------------------------+
+    |                        Results: 2 files were found to be different                          |
+    |                       Difference Files at /path/to/screenshots/diff                         |
+    +---------------------------------------------------------------------------------------------+
+    >> _
+
+you can see here that not everything passed (or was exactly the same) in each test case. the __user__ and __current_user__ cases did not pass. to investigate, you can look at the _diff_ directory under _/path/to/screenshots/_. you will see what differences were found in each test case.
+
+the __Magnitude__ column is a relative representation of the number of pixels found that changed between the two screenshots. it only shows relative levels of _failiness_.
 
 in addition, you can see that there were extra files in each data set. other comparisons are not affected.
 

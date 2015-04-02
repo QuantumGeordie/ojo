@@ -36,12 +36,10 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal @location, r[1][:location]
     assert_equal 'branch_1', r[1][:branch_1]
     assert_equal 'branch_2', r[1][:branch_2]
-    assert_equal 1, r[1][:results].keys.count
-    assert_equal File.basename(file_1), r[1][:results].keys.first
-    assert_equal true, r[1][:results]['test_one.png'][:same]
-    assert_equal file_1, r[1][:results]['test_one.png'][:file_1]
-    assert_equal file_2, r[1][:results]['test_one.png'][:file_2]
-
+    assert_equal 1, r[1][:results].count
+    assert_equal true,   r[1][:results].first[:same]
+    assert_equal file_1, r[1][:results].first[:file_1]
+    assert_equal file_2, r[1][:results].first[:file_2]
   end
 
   def test_comparison__single_file__different
@@ -69,11 +67,10 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal @location, r[1][:location]
     assert_equal 'branch_1', r[1][:branch_1]
     assert_equal 'branch_2', r[1][:branch_2]
-    assert_equal 1, r[1][:results].keys.count
-    assert_equal File.basename(file_1), r[1][:results].keys.first
-    assert_equal false, r[1][:results]['test_one.png'][:same]
-    assert_equal file_1, r[1][:results]['test_one.png'][:file_1]
-    assert_equal file_2, r[1][:results]['test_one.png'][:file_2]
+    assert_equal 1, r[1][:results].count
+    assert_equal false,  r[1][:results].first[:same]
+    assert_equal file_1, r[1][:results].first[:file_1]
+    assert_equal file_2, r[1][:results].first[:file_2]
   end
 
   def test_comparison__single_file__different_size
@@ -98,11 +95,10 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal @location, r[1][:location]
     assert_equal 'branch_1', r[1][:branch_1]
     assert_equal 'branch_2', r[1][:branch_2]
-    assert_equal 1, r[1][:results].keys.count
-    assert_equal File.basename(file_1), r[1][:results].keys.first
-    assert_equal false, r[1][:results]['test_one.png'][:same]
-    assert_equal file_1, r[1][:results]['test_one.png'][:file_1]
-    assert_equal file_2, r[1][:results]['test_one.png'][:file_2]
+    assert_equal 1, r[1][:results].count
+    assert_equal false, r[1][:results].first[:same]
+    assert_equal file_1, r[1][:results].first[:file_1]
+    assert_equal file_2, r[1][:results].first[:file_2]
   end
 
   def test_comparison__multiple_files
@@ -130,7 +126,7 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal @location, r[1][:location]
     assert_equal 'branch_1', r[1][:branch_1]
     assert_equal 'branch_2', r[1][:branch_2]
-    assert_equal 3, r[1][:results].keys.count
+    assert_equal 3, r[1][:results].count
 
     file_1_4 = File.join(@branch_1, 'file_four.png')
     file_2_4 = File.join(@branch_2, 'file_four.png')
@@ -143,19 +139,22 @@ class ComparisonTest < Ojo::OjoTestCase
     assert_equal @location, r[1][:location]
     assert_equal 'branch_1', r[1][:branch_1]
     assert_equal 'branch_2', r[1][:branch_2]
-    assert_equal 4, r[1][:results].keys.count
+    assert_equal 4, r[1][:results].count
 
-    assert r[1][:results].keys.include?(File.basename(file_1_1))
-    assert r[1][:results].keys.include?(File.basename(file_1_2))
-    assert r[1][:results].keys.include?(File.basename(file_2_1))
-    assert r[1][:results].keys.include?(File.basename(file_2_3))
-    assert r[1][:results].keys.include?(File.basename(file_1_4))
-    assert r[1][:results].keys.include?(File.basename(file_2_4))
+    files_tested = get_files_in_test(r[1][:results])
 
-    assert_equal true,  r[1][:results][File.basename(file_1_1)][:same]
-    assert_equal nil,   r[1][:results][File.basename(file_1_2)][:same]
-    assert_equal nil,   r[1][:results][File.basename(file_2_3)][:same]
-    assert_equal false, r[1][:results][File.basename(file_1_4)][:same]
+    assert files_tested.include?(file_1_1)
+    assert files_tested.include?(file_1_2)
+    assert files_tested.include?(file_2_1)
+    assert files_tested.include?(file_2_3)
+    assert files_tested.include?(file_1_4)
+    assert files_tested.include?(file_2_4)
+
+    all_results = r[1][:results].map { |r| r[:same] }
+
+    assert_equal 1, all_results.count(false)
+    assert_equal 1, all_results.count(true)
+    assert_equal 2, all_results.count(nil)
 
     diff_location = File.join(Ojo.configuration.location, 'diff')
     assert_equal 1, Dir[File.join(diff_location, '*.png')].count
@@ -165,4 +164,11 @@ class ComparisonTest < Ojo::OjoTestCase
     assert File.exist?(File.join(diff_location, File.basename(file_1_4)))
   end
 
+  private
+
+  def get_files_in_test(results)
+    file_1_files = results.map { |result| result[:file_1] }
+    file_2_files = results.map { |result| result[:file_2] }
+    file_1_files + file_2_files
+  end
 end
