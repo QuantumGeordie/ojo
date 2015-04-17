@@ -1,3 +1,27 @@
-<h1>Ojo</h1>
-<h3>an extra set of eyes</h3>
-<p>Ojo helps with visual regression testing.</p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Ojo</title>
+  <meta name="description" content="Visual regression testing">
+  <meta name="author" content="QauntumGeordie">
+
+  <link rel="stylesheet" href="stylesheets/application.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <header>
+    <h1><i class="fa fa-eye"></i> Ojo</h1>
+    <h3 class="sub_title">an extra set of eyes</h3>
+
+  </header>
+  <p>Ojo helps with visual regression testing. <a href="https://github.com/QuantumGeordie/dom_glancy">DOM Glancy</a> is another attempt at the same.</p>
+  <p>Ojo is not fancy. it just does a simple comparison of two sets of screenshots. the idea is that there is a set of tests or scripts that will compile the two sets (for example, one from a master branch and another from a feature branch). running the rake task that Ojo adds to the rails app will tell you if the two sets of files differ. the rake task is <code>ojo:compare[branch_1,branch_2]</code>.</p>
+</body>
+</html>
+
+

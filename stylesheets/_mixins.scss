@@ -1,0 +1,18 @@
+$medium-breakpoint: 640px !default;
+$large-breakpoint: 950px !default;
+
+@mixin small-only {
+  @media (max-width: $medium-breakpoint) { @content; }
+}
+
+@mixin medium-only {
+  @media (min-width: $medium-breakpoint + 1px) and (max-width: $large-breakpoint) { @content; }
+}
+
+@mixin medium-up {
+  @media (min-width: $medium-breakpoint + 1px) { @content; }
+}
+
+@mixin large-only {
+  @media (min-width: $large-breakpoint + 1px) { @content; }
+}

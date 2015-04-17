@@ -1,0 +1,39 @@
+body {
+  background-color: $background;
+  color: $text;
+  font-family: 'Roboto', sans-serif;
+  margin: 1em;
+}
+
+h1, h2, h3, h4, h5 {
+  color: $headers;
+  font-family: 'Dosis', sans-serif;
+  margin: 0em;
+}
+
+h1 { font-size: 4em;  }
+
+a       { color: $link-color; text-decoration: underline; }
+a:hover { color: $link-hover; text-decoration: none; }
+
+header {
+  padding-bottom: 7px;
+  text-align: center;
+  @include small-only {
+    font-size: 0.8em;
+  }
+}
+
+.sub_title_or {
+  color: lighten($headers, 50%);
+}
+
+.sub_title {
+  font-style: italic;
+}
+
+code {
+  color: lighten($text, 20%);
+  border-radius: 4px;
+  border: 1px solid lighten($text, 80%);
+}
