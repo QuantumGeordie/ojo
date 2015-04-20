@@ -1,0 +1,14 @@
+$list-text: $headers;
+
+li {
+  line-height: 1.6em;
+}
+
+.optional {
+  font-weight: 300;
+  font-style: italic;
+}
+
+.required {
+    font-weight: 600;
+}

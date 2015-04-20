@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
+
 </head>
 
 <body>
@@ -19,8 +21,99 @@
     <h3 class="sub_title">an extra set of eyes</h3>
 
   </header>
-  <p>Ojo helps with visual regression testing. <a href="https://github.com/QuantumGeordie/dom_glancy">DOM Glancy</a> is another attempt at the same.</p>
-  <p>Ojo is not fancy. it just does a simple comparison of two sets of screenshots. the idea is that there is a set of tests or scripts that will compile the two sets (for example, one from a master branch and another from a feature branch). running the rake task that Ojo adds to the rails app will tell you if the two sets of files differ. the rake task is <code>ojo:compare[branch_1,branch_2]</code>.</p>
+  <div class='content'>
+    <h2>History</h2>
+
+    <p>As a wise C programmer once told me, "When you make changes, things change." We all know this to be true, so we add tons of unit, functional and integration tests. Hopefully, a change in one area of the code does not break things in other areas. But with good code coverage we can be fairly confident that we will catch the unintended "things change" side affects.</p>
+
+    <p>Blah, blah, blah; We've all heard the arguments for testing. We either do it or we don't, but the idea is not new. Our development team drank the testing Kool-Aid long ago. But we didn't have any way of keeping track of the visual changes within our application nearly as well as those in business logic. Add that to the fact that our great ruby developers weren't yet that great at CSS. So along came this idea of appearance testing.</p>
+
+    <blockquote>
+      I have found appearance tests to be useful in refactoring shared partials.  For example, say you want to change some CSS on a shared partial to make a particular page look better.  The changes you make look great on that particular page but you don't know if you negatively affected any other page.  Appearance tests will make it easy to know what deep dark corners of the app you touched.  <span class='quote_source'>Engineering Manager</span>
+    </blockquote>
+
+    <h2>CI, Master Files and the Update Hassle</h2>
+
+    <p>Our first incarnation of appearance tests were a suite of selenium-driven tests that set up a page, grabbed a screenshot of the page, and then did a pixel-by-pixel comparison of the test generated screenshot to a file from a previous run of the same test. this previous file came to be called a <strong>master file</strong>. The test was said to have passed if there were no pixels found to be different between the <strong>test file</strong> and the <strong>master file</strong>.</p>
+
+    <p>Our tests could be run on local development machines and were setup to run on our CI (Continuous Integration) system following every commit.</p>
+
+    <p>Quickly we saw that a passing condition of zero differences was too strict. We added some options in an attempt to allowed the test to ignore small changes that were more the result of various factors like screen resolution, rendering issues, window focus, etc. than real page failures. Things got a little better.</p>
+
+    <p>There were still false failures, but in general, our CI tests accurately reported real changes to our application's pages. But this opened up a whole new can of worms. The development team was in the business of changing our page all the time. That's what we do. We add functionality. We move things around. We remove bits of UI that are no longer needed. We write software for the interwebs. This means that the appearance tests were failing regularly.</p>
+
+    <blockquote>
+      I have felt appearance test pain as well.  Blessing them is terribly difficult and I forget which png file to actually copy over every time.  The feedback loop is terribly slow. Lastly, merging is nearly impossible if two engineers simultaneously change the appearance tests.  The nice thing is that I hardly ever have to do any of these things but when I do its a real pain.  <span class='quote_source'>Engineering Manager</span>
+    </blockquote>
+
+    <p>This shouldn't really be a problem, right? I mean, we make changes to the back-end code that often requires a change to a unit test. Why expect anything less with front-end code? Easy answer is that we don't. The real problem was that it was a pain to wade through the false failures, rendering issues, and intended changes to decide if updating the master files with the new test files was appropriate (we came to call this process "blessing" new masters).</p>
+
+    <p>We also found that we ended up with the problem that files generated on a developer's machine did not match those generated on our CI machines. From one CI machine to the next, all was fine, but not from local to CI. This meant that even after the test failed on CI, for intended or unintended changes, the process of reviewing the results and <strong>blessing</strong> the new files was terribly painful. And as we all know, if it gets too painful, the tests stop being updated. And if the tests don't get updated, then they stay red. And if they stay red, then its better that they don't exist at all.</p>
+
+    <p>The tests did indeed find a handful of unintended changes that we were grateful to have caught. But before a year was out, the tests were abandoned.</p>
+
+    <blockquote>
+      We don't have appearance tests? WTF? When did that happen? Did we replace them with something? <span class="quote_source">Anonymous Developer</span>
+    </blockquote>
+
+    <h2>Enter Ojo</h2>
+
+    <p>It was still bothersome that we weren't doing any visual regression testing. So the guts of our old appearance testing gem was scavenged and <code>Ojo</code> was born. The image comparison routines were borrowed and adapted to fit into the CLI-style tests that Ojo supplies. Gone were the CI tests with their assertions and suite pass/fail criteria.</p>
+
+    <p>More importantly, gone were the master files.</p>
+
+    <p>Now <strong>Ojo</strong> simply compares two sets of screenshots and reports which ones are different and which ones are the same. <strong>Ojo</strong> really has nothing to do with the compiling of the data sets. Assuming that there are two sets of data in a configured location, <strong>Ojo</strong> will generate a report and a set of <strong>difference files</strong>. These difference files can be quickly scanned to see if the reported changes were of concern or not.</p>
+
+    <p>In our test suite, the abandoned appearance tests from round one were re-purposed to generate screenshots after page setup and manipulation. The tests were still done using our standard <a href="http://www.seleniumhq.org/">Selenium</a>/<a href="http://jnicklas.github.io/capybara/">Capybara</a> test methodology. We just did away with the assertion that the first appearance test gem supplied and took screenshots that were named appropriate to the test and git development branch that the test were run in.</p>
+
+    <h2>Example</h2>
+
+    <p>The following steps are an example of how <strong>Ojo</strong> can be used. It shows the current setup that is used by our development team.</p>
+
+    <p>There are two kinds of steps listed in this example. <span class='optional'>The first are prep steps don't have anything to do with <strong>Ojo</strong> proper. They are just preparing the data sets that will be compared.</span>  <span class='required'>The second set of steps show those that are running the <strong>Ojo</strong> comparisons.</span></p>
+    <ol>
+      <li class='optional'>git checkout <strong>master</strong></li>
+      <li class='optional'>rake test:appearance</li>
+      <li class='optional'>git checkout <strong>feature_branch</strong></li>
+      <li class='optional'>rake test:appearance</li>
+      <li class='required'>rake ojo:compare</li>
+    </ol>
+
+    <p>This example assumes the development work was done on a git branch named <strong>feature_branch</strong> and that we would like to compare the screenshots generated in the appearance test suite to a similar set generated off of the git branch named <strong>master</strong>.</p>
+
+    <p>The output of the <code>rake ojo:compare</code> run in the terminal is a table of filenames and how they compared.</p>
+
+    <img src="images/compare.png" alt="">
+
+    <p>The above results show a test case run in a project called <strong>faktory</strong>. The output shows that the <code>current_user.png</code> and <code>user.png</code> files were found to be different between the <code>master</code> and <code>master_copy</code> branches. It also shows that the <code>test_home.png</code> and <code>signed_in.png</code> files were identical. In addition, <code>master_only.png</code> and <code>copy_only.png</code> are shown to be found in only one of the datasets.</p>
+
+    <p>In the example images below, you can see that someone made a change in the <a href="https://github.com/QuantumGeordie/faktory">faktory project</a> CSS that caused the paragraphs to be sized slightly different. The <strong>Ojo</strong> test is designed to catch such changes.</p>
+
+    <h3>master</h3>
+    <p>The screenshot of the faktory page as it appears on the master branch.</p>
+    <img src="images/test_home_master.png" alt="">
+    <h3>branch file</h3>
+    <p>The screenshot of the faktory page as it appears on the feature branch. this change may have been on purpose or inadvertent.</p>
+    <img src="images/test_home_branch.png" alt="">
+    <h3>difference file</h3>
+    <p>The image generated by the ojo comparison routine showing in red the areas that are different between the two screenshots.</p>
+    <img src="images/test_home_diff.png" alt="">
+
+    <p>Below we see another set of images that show two datasets that differ for reasons that do not show a real change. In this case, the test code generated objects with changing random numbers and dates (these tests used <a href="#">factory_girl</a>). These test specific values will appear as differences between the two datasets. The difference file can be quickly scanned manually to tell that this is not a true failure case.</p>
+
+    <h3>master</h3>
+    <p>The screenshot of the page as it appears on the master branch.</p>
+    <img src="images/user_master.png" alt="">
+    <h3>branch file</h3>
+    <p>The screenshot of the page as it appears on the feature branch.</p>
+    <img src="images/user_branch.png" alt="">
+    <h3>difference file</h3>
+    <p>The image generated by the ojo comparison routine showing in red the areas that are different between the two screenshots.</p>
+    <img src="images/user_diff.png" alt="">
+
+
+
+  </div>
 </body>
 </html>
 

@@ -1,0 +1,33 @@
+blockquote {
+  color: lighten($text, 40%);
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.4em;
+  position: relative;
+
+  @include medium-up {
+    display: block;
+    font-size: 2.4em;
+    font-weight: 100;
+    margin: 0 0 15px;
+    padding: 15px 20px 15px 60px;
+  }
+}
+
+blockquote::before{
+  @include medium-up {
+    content: "\201C";
+    font-size: 100px;
+    left: 30px;
+    position: absolute;
+    top: 0px;
+  }
+}
+
+blockquote::after{
+  content: "";
+}
+
+.quote_source {
+  font-size: 0.6em;
+  font-style: italic;
+}
