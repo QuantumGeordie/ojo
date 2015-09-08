@@ -360,6 +360,7 @@ body {
   background-color: #ffffff;
   color: #4a002f;
   font-family: 'Roboto', sans-serif;
+  font-size: 1.2em;
   margin: 1em; }
 
 h1, h2, h3, h4, h5 {
@@ -388,11 +389,12 @@ header {
 
 img {
   width: 100%;
-  box-shadow: 0 16px 14px -14px black; }
+  box-shadow: 0 16px 14px -14px black;
+  margin-bottom: 20px; }
 
 .content {
-  background-color: #eeeeee;
-  border-radius: 10px;
+  /*background-color: #eeeeee;*/
+  /*border-radius: 10px;  */
   margin: 0 auto;
   max-width: 800px;
   padding: 60px; }
@@ -454,5 +456,8 @@ blockquote::after {
 .quote_source {
   font-size: 0.6em;
   font-style: italic; }
+
+code {
+  font-size: 0.8em; }
 
 /*# sourceMappingURL=application.css.map */
